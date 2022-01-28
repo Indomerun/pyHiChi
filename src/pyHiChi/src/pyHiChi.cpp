@@ -35,7 +35,7 @@
     .def("set", &pyFieldType::setFieldConfiguration<NullField>,           \
         py::arg("field_configuration"))                                   \
     .def("set", &pyFieldType::setFieldConfiguration<TightFocusingField>,  \
-        py::arg("field_configuration")) 
+        py::arg("field_configuration"))
 
 
 #define SET_COMPUTATIONAL_GRID_METHODS(pyFieldType)                        \
@@ -359,6 +359,9 @@ PYBIND11_MODULE(pyHiChi, object) {
         .def("process_particles", &Scalar_Fast_QED_only_electron_Analytical::processParticles)
         .def("process_particles", &processParticles<Scalar_Fast_QED_only_electron_Analytical,
             pyAnalyticalField, AnalyticalField>)
+        .def("count_integral_particle", &Scalar_Fast_QED_only_electron_Analytical::countIntegralParticle, py::arg("chi"))
+        .def("photon_generator", &Scalar_Fast_QED_only_electron_Analytical::Photon_Generator_test, py::arg("r"), py::arg("Pdelta"), py::arg("chi"))
+
         ;
     // ------------------- thinnings -------------------
 
@@ -387,7 +390,7 @@ PYBIND11_MODULE(pyHiChi, object) {
         .def("get_inverse_coords", &PeriodicalMapping::getInverseCoords, py::arg("coords"),
             py::arg("time") = 0.0, py::arg("status") = 0)
         ;
-    
+
     py::class_<RotationMapping, std::shared_ptr<RotationMapping>>(object, "RotationMapping", pyMapping)
         .def(py::init<Coordinate, FP>(), py::arg("axis"), py::arg("angle"))
         .def("get_direct_coords", &RotationMapping::getDirectCoords, py::arg("coords"),
@@ -563,7 +566,7 @@ PYBIND11_MODULE(pyHiChi, object) {
         ;
 
     py::class_<TightFocusingField>(object, "TightFocusingField")
-        .def(py::init<FP, FP, FP, FP, FP, FP>(), 
+        .def(py::init<FP, FP, FP, FP, FP, FP>(),
             py::arg("f_number"), py::arg("R0"), py::arg("wavelength"), py::arg("pulselength"),
             py::arg("totalPower"), py::arg("edge_smoothing_angle"))
         .def(py::init<FP, FP, FP, FP, FP, FP, FP3>(),

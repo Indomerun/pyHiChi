@@ -197,8 +197,8 @@ namespace pfc
             while (time < timeStep)
             {
                 FP3 v = particle.getVelocity();
-                FP H_eff = sqr(E + (1 / Constants<FP>::lightVelocity()) * VP(v, B))
-                    - sqr(SP(E, v) / Constants<FP>::lightVelocity());
+                FP H_eff = sqr(E + (1 / Constants<FP>::lightVelocity()) * cross(v, B))
+                    - sqr(dot(E, v) / Constants<FP>::lightVelocity());
                 if (H_eff < 0) H_eff = 0;
                 H_eff = sqrt(H_eff);
                 FP gamma = particle.getGamma();
@@ -572,7 +572,7 @@ namespace pfc
             return rand_n;
         }
 
-        
+
         std::default_random_engine rand_generator;
         std::uniform_real_distribution<FP> distribution;
 
