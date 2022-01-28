@@ -70,7 +70,7 @@ namespace pfc
                 HandleParticles((*particles)[Electron], grid, timeStep);
             if ((*particles)[Positron].size() && coeffPhoton_probability != 0)
                 HandleParticles((*particles)[Positron], grid, timeStep);
-            
+
 
             for (int th = 0; th < max_threads; th++)
             {
@@ -116,7 +116,7 @@ namespace pfc
 
         void HandleParticles(ParticleArray3d& particles, TGrid* grid, FP timeStep)
         {
-            
+
 #pragma omp parallel for
             for (int i = 0; i < particles.size(); i++)
             {
@@ -131,7 +131,7 @@ namespace pfc
 
                 e = grid->getE(pPos);
                 b = grid->getB(pPos);
-                
+
                 AvalancheParticles[thread_id].clear();
                 AvalanchePhotons[thread_id].clear();
                 timeAvalancheParticles[thread_id].clear();
@@ -152,7 +152,7 @@ namespace pfc
                     afterAvalancheParticles[thread_id].push_back(AvalancheParticles[thread_id][k]);
             }
         }
-        
+
         void RunAvalanche(const FP3& E, const FP3& B, double timeStep)
         {
             int thread_id;
@@ -166,7 +166,7 @@ namespace pfc
 
             vector<FP>& timeAvalancheParticles = this->timeAvalancheParticles[thread_id];
             vector<FP>& timeAvalanchePhotons = this->timeAvalanchePhotons[thread_id];
-            
+
             int countParticles = 0;
             int countPhotons = 0;
 
@@ -228,7 +228,7 @@ namespace pfc
                     FP chi_new = gamma * H_eff / SchwingerField;
 
                     FP delta = Photon_Generator((chi + chi_new)/(FP)2.0);
-                    
+
                     Particle3d NewParticle;
                     NewParticle.setType(Photon);
                     NewParticle.setWeight(particle.getWeight());
@@ -285,7 +285,7 @@ namespace pfc
 
             }
         }
-        
+
         FP countIntegralParticle(const FP& chi)
         {
             FP a = ((FP)2.0) / ((FP)3.0 * chi);
@@ -321,8 +321,8 @@ namespace pfc
                                 (-0.281572569349380384310336886937 +
                                     (0.895653891863824341959839156308 -
                                         0.134897704841544559226394769484 * x) * x) * x) * x) * x) * x;
-                integral1 /= ((0.843872941653236121174825417487 + 
-                    (-0.057054798244106575113190716375 + 
+                integral1 /= ((0.843872941653236121174825417487 +
+                    (-0.057054798244106575113190716375 +
                         0.464414111160427232538525019242 * x) * x) * x * x);
             }
             else if (a < 4)
@@ -380,7 +380,7 @@ namespace pfc
                                             (5.6192589175110679089401209364346495908307449422677 * 1e-11 +
                                                 (2.3517547519624772649641783723954402272924299437778 * 1e-13 +
                                                     (7.4732788003295848028752816444661730928555234163192 * 1e-16 +
-                                                        2.5199767877292697793935365315523079903241129533065 * 1e-18 * 
+                                                        2.5199767877292697793935365315523079903241129533065 * 1e-18 *
                                                         t) * t) * t) * t) * t) * t) * t) * t) * t) * t;
                 FP p2 = 4.3619451002615210136142189247291646114412066333006 +
                     (0.53806888572279765512786506093776285799130692595714 +
@@ -484,7 +484,7 @@ namespace pfc
             r *= ((FP)2.0 * Constants<FP>::pi() * particle.getGamma()) / (sqrt((FP)3) * chi);
             return r / (preFactor*Pdelta);
         }
-        
+
         FP Photon_Generator(FP chi)
         {
             FP r = random_number_omp();
@@ -544,6 +544,7 @@ namespace pfc
             return delta;
         }
 
+        // This function is purely for debug purposes, in order to send in a known "random" number r to Photon_Generator().
         FP Photon_Generator_test(FP r, FP chi)
         {
             int N = 192;
@@ -602,6 +603,11 @@ namespace pfc
             return delta;
         }
 
+        FP countIntegralPairs(const FP& chi)
+        {
+            return 1.0; // TO DO
+        }
+
         FP getDtPhoton(Particle3d& particle, const FP3& E, const FP3& B)
         {
             return 100.0; // TO DO
@@ -610,6 +616,12 @@ namespace pfc
         FP Pair_Generator()
         {
             return 0.0; // TO DO
+        }
+
+        // This function is purely for debug purposes, in order to send in a known "random" number r to Pair_Generator().
+        FP Pair_Generator_test(FP r, FP chi)
+        {
+            return 1.0; // TO DO
         }
 
         void operator()(ParticleProxy3d* particle, ValueField field, FP timeStep)
@@ -639,7 +651,7 @@ namespace pfc
         vector<vector<Particle3d>> afterAvalanchePhotons, afterAvalancheParticles;
 
         inline static const uint64_t int_g[] = {
-#include "QED_g.in" 
+#include "QED_g.in"
         };
 
         FP SchwingerField;

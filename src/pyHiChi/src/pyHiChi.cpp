@@ -361,6 +361,8 @@ PYBIND11_MODULE(pyHiChi, object) {
             pyAnalyticalField, AnalyticalField>)
         .def("count_integral_particle", &Scalar_Fast_QED_only_electron_Analytical::countIntegralParticle, py::arg("chi"))
         .def("photon_generator", &Scalar_Fast_QED_only_electron_Analytical::Photon_Generator_test, py::arg("r"), py::arg("chi"))
+        .def("count_integral_pairs", &Scalar_Fast_QED_only_electron_Analytical::countIntegralPairs, py::arg("chi"))
+        .def("pair_generator", &Scalar_Fast_QED_only_electron_Analytical::Pair_Generator_test, py::arg("r"), py::arg("chi"))
 
         ;
     // ------------------- thinnings -------------------
